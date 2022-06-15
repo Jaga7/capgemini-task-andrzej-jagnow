@@ -1,0 +1,23 @@
+body {
+  justify-items: center;
+  font-family: Roboto, sans-serif;
+}
+
+.cardsListContainer {
+  padding: 0.7rem;
+  display: flex;
+  flex-wrap: wrap;
+  border: 5px solid black;
+}
+.card {
+  margin: auto;
+}
+
+.card:focus,
+.card.focus {
+  background-color: gray;
+}
+
+.studentNameContainer {
+  margin: 0.5em 0;
+}
