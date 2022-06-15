@@ -32,10 +32,12 @@ const students = [
   },
 ]
 
-// 5 or less - red
-const cardsListContainer = document.createElement("div")
-cardsListContainer.classList.add("cardsListContainer")
-document.body.append(cardsListContainer)
+const createCardsListContainer = () => {
+  const cardsListContainer = document.createElement("div")
+  cardsListContainer.classList.add("cardsListContainer")
+  document.body.append(cardsListContainer)
+  return cardsListContainer
+}
 
 const createCard = () => {
   const card = document.createElement("div")
@@ -50,32 +52,28 @@ const createCard = () => {
   return card
 }
 
-for (let student of students) {
-  const card = createCard()
-
-  cardsListContainer.appendChild(card)
-
+const createStudentNameContainer = (studentName, studentLastName) => {
   const studentNameContainer = document.createElement("div")
   studentNameContainer.classList.add("studentNameContainer")
 
   const studentNameAndSurname = document.createElement("p")
-  studentNameAndSurname.innerText = `${student.name} ${student.lastName}`
+  studentNameAndSurname.innerText = `${studentName} ${studentLastName}`
   studentNameAndSurname.classList.add("studentNameAndSurname")
   studentNameContainer.appendChild(studentNameAndSurname)
-  card.appendChild(studentNameContainer)
+  return studentNameContainer
+}
 
-  const studentAttendanceNumber = student.marks.reduce(
+const giveStudentAttendanceNumber = (studentMarks) => {
+  return studentMarks.reduce(
     (previousValue, currentValue) =>
       currentValue !== null ? previousValue + 1 : previousValue,
     0
   )
+}
 
-  const studentAttendance = document.createElement("p")
-  studentAttendance.innerText = `visited lectures: ${studentAttendanceNumber}`
-  card.appendChild(studentAttendance)
-
+const createAverageMark = (studentMarks, studentAttendanceNumber) => {
   const averageMarkNumber =
-    student.marks.reduce(
+    studentMarks.reduce(
       (previousValue, currentValue) => currentValue + previousValue,
       0
     ) / studentAttendanceNumber
@@ -87,5 +85,36 @@ for (let student of students) {
   } else {
     averageMark.style.border = `2px solid green`
   }
-  card.appendChild(averageMark)
+  return averageMark
 }
+
+const createStudentsLayout = (students) => {
+  // 5 or less - red
+  const cardsListContainer = createCardsListContainer()
+
+  for (let student of students) {
+    const card = createCard()
+
+    cardsListContainer.appendChild(card)
+
+    const studentNameContainer = createStudentNameContainer(
+      student.name,
+      student.lastName
+    )
+    card.appendChild(studentNameContainer)
+
+    const studentAttendanceNumber = giveStudentAttendanceNumber(student.marks)
+    const studentAttendance = document.createElement("p")
+    studentAttendance.innerText = `visited lectures: ${studentAttendanceNumber}`
+    card.appendChild(studentAttendance)
+
+    const averageMark = createAverageMark(
+      student.marks,
+      studentAttendanceNumber
+    )
+
+    card.appendChild(averageMark)
+  }
+}
+
+createStudentsLayout(students)
